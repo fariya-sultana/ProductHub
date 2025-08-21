@@ -132,7 +132,7 @@ export default function AddProductPage() {
                 {/* Product Image URL */}
                 <div>
                     <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
-                        <Image className="w-4 h-4 inline mr-2" />
+                        <Image width={16} height={16} alt="" className="w-4 h-4 inline mr-2" />
                         Image URL (Optional)
                     </label>
                     <input
