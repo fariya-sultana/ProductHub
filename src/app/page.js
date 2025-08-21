@@ -1,9 +1,8 @@
+import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import Hero from './components/Hero'
-import Footer from './components/Footer'
 import ProductCard from './components/ProductCard'
 import { getFeaturedProducts } from './lib/products'
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 
 export default function HomePage() {
   const featuredProducts = getFeaturedProducts()
@@ -92,9 +91,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   )
 }

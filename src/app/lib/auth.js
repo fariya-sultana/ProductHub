@@ -1,19 +1,13 @@
-import { NextAuthOptions } from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
+import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
+import clientPromise from "./mongodb"
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 
-// Mock user database - in real app, use actual database
-const users = [
-  {
-    id: "1",
-    email: "demo@example.com",
-    password: bcrypt.hashSync("password123", 12),
-    name: "Demo User"
-  }
-]
+
 
 export const authOptions = {
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -26,27 +20,13 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null
-        }
-
-        const user = users.find(user => user.email === credentials.email)
-        
-        if (!user) {
-          return null
-        }
-
-        const isPasswordValid = bcrypt.compareSync(credentials.password, user.password)
-
-        if (!isPasswordValid) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        }
+        const client = await clientPromise;
+        const db = client.db("product-management-app");
+        const user = await db.collection("users").findOne({ email: credentials.email });
+        if (!user) throw new Error("No user found");
+        const isValid = await db.collection("users").findOne({ password: credentials.password });
+        if (!isValid) throw new Error("Invalid password");
+        return { id: user._id, email: user.email, name: user.name };
       }
     })
   ],

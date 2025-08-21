@@ -1,35 +1,25 @@
-import { NextResponse } from "next/server"
-import { getAllProducts, addProduct } from "../../lib/products"
-import { getServerSession } from "next-auth"
-import { authOptions } from "../../lib/auth"
+import clientPromise from "@/app/lib/mongodb";
+
 
 export async function GET() {
   try {
-    const products = getAllProducts()
-    return NextResponse.json(products)
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 })
+    const client = await clientPromise;
+    const db = client.db("product-management-app");
+    const products = await db.collection("products").find().toArray();
+    return new Response(JSON.stringify(products), { status: 200 });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
 
-export async function POST(request) {
+export async function POST(req) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    const productData = await request.json()
-    
-    // Basic validation
-    if (!productData.name || !productData.price) {
-      return NextResponse.json({ error: "Name and price are required" }, { status: 400 })
-    }
-
-    const newProduct = addProduct(productData)
-    return NextResponse.json(newProduct, { status: 201 })
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to create product" }, { status: 500 })
+    const client = await clientPromise;
+    const db = client.db("product-management-app");
+    const data = await req.json();
+    await db.collection("products").insertOne(data);
+    return new Response(JSON.stringify({ message: "Product added" }), { status: 201 });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
