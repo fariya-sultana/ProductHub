@@ -18,7 +18,7 @@ const LoginPage = () => {
 
     const router = useRouter()
     const searchParams = useSearchParams()
-    const callbackUrl = searchParams.get('callbackUrl') || '/'
+    const callbackUrl = searchParams.get('callbackUrl') || '/products'
     const error = searchParams.get('error')
 
     // Handle URL error parameters
@@ -92,11 +92,7 @@ const LoginPage = () => {
                 }
             } else if (result?.ok) {
                 toast.success('Login successful!')
-                console.log('✅ Login successful, redirecting to:', callbackUrl)
-                // Small delay to show success message
-                setTimeout(() => {
-                    router.push(callbackUrl)
-                }, 5000)
+                router.push('/products')
             }
         } catch (error) {
             console.error('❌ Login exception:', error)
@@ -109,9 +105,8 @@ const LoginPage = () => {
     const handleGoogleLogin = async () => {
         setIsGoogleLoading(true)
         try {
-            console.log('🔄 Attempting Google login')
             const result = await signIn('google', {
-                callbackUrl,
+                callbackUrl: '/products',      
                 redirect: false
             })
 

@@ -2,7 +2,7 @@
 import Sidebar from '../components/Sidebar';
 import DashboardOverview from '../components/DashboardOverview';
 
-export default function DashboardLayout({ children }) {
+export default async function DashboardLayout({ children }) {
     
     return (
         <div className="min-h-screen bg-gray-50">

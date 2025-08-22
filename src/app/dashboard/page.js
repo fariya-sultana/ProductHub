@@ -1,8 +1,8 @@
 
 import Link from 'next/link';
 import { Plus, Package, Users, TrendingUp, DollarSign } from 'lucide-react';
-import { authOptions } from '../lib/auth';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '../lib/auth';
 
 async function getProducts() {
     try {

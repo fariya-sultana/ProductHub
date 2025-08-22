@@ -2,11 +2,10 @@
 import { Home } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
-import { authOptions } from '../lib/auth';
 import { useSession } from 'next-auth/react';
 
 const DashboardOverview = () => {
-    const { data: session } = useSession(authOptions)
+    const { data: session } = useSession()
     console.log("Session:", session);
 
     return (
