@@ -3,7 +3,7 @@ import { ArrowLeft, ShoppingCart } from 'lucide-react';
 
 async function getProduct(id) {
     try {
-        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products/${id}`, {
+        const res = await fetch(`http://localhost:3000/api/products/${id}`, {
             cache: 'no-store',
         });
 
@@ -18,12 +18,15 @@ async function getProduct(id) {
     }
 }
 
+
+
 export default async function ProductDetails({ params }) {
-    const product = await getProduct(params.id);
+    const id = params.id;
+    const product = await getProduct(id);
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
                     <p className="text-gray-600 mb-6">The product you are looking for does not exist.</p>

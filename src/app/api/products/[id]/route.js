@@ -1,29 +1,35 @@
-import { NextResponse } from 'next/server';
+import { MongoClient, ObjectId } from 'mongodb';
 
-export async function GET(
-    request,
-    { params }
-) {
+const uri = process.env.MONGODB_URI;
+
+export async function GET({ params }) {
     try {
-        const product = await prisma.product.findUnique({
-            where: {
-                id: params.id,
-            },
-        });
+        const client = new MongoClient(uri);
+        await client.connect();
+
+        const database = client.db("product-management-app");
+        const collection = database.collection("products");
+
+        const product = await collection.findOne({ _id: new ObjectId(params.id) });
+
+        await client.close();
 
         if (!product) {
-            return NextResponse.json(
-                { message: 'Product not found' },
-                { status: 404 }
-            );
+            return new Response(JSON.stringify({ error: "Product not found" }), {
+                status: 404,
+                headers: { "Content-Type": "application/json" },
+            });
         }
 
-        return NextResponse.json(product);
+        return new Response(JSON.stringify(product), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
     } catch (error) {
-        console.error('Error fetching product:', error);
-        return NextResponse.json(
-            { message: 'Internal server error' },
-            { status: 500 }
-        );
+        console.error(error);
+        return new Response(JSON.stringify({ error: "Failed to fetch product" }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
     }
 }

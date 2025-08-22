@@ -14,7 +14,7 @@ export default function ProductCard({ product }) {
         />
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${product._id}`}
             className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 flex items-center space-x-2"
           >
             <Eye className="h-4 w-4" />
@@ -57,7 +57,7 @@ export default function ProductCard({ product }) {
           </div>
           
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${product._id}`}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center space-x-2"
           >
             <ShoppingCart className="h-4 w-4" />
