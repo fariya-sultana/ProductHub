@@ -2,10 +2,27 @@ import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import Hero from './components/Hero'
 import ProductCard from './components/ProductCard'
-import { getFeaturedProducts } from './lib/products'
 
-export default function HomePage() {
-  const featuredProducts = getFeaturedProducts()
+
+async function getProducts() {
+  try {
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products`, {
+      cache: 'no-store', // ensures fresh data
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch products');
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const featuredProducts = await getProducts();
 
   return (
     <div>
@@ -26,7 +43,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
 
