@@ -8,7 +8,7 @@ export default withAuth(
         callbacks: {
             // Restrict only authenticated users
             authorized: ({ token }) => {
-                console.log("Middleware token:", token) // 👈 check logs
+                // console.log("Middleware token:", token) // 👈 check logs
                 return !!token
             },
 

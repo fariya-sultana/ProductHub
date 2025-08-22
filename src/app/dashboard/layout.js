@@ -1,5 +1,5 @@
 import Sidebar from '../components/Sidebar';
-import DashboardOverview from '../components/DashboardOverview';
+// import DashboardOverview from '../components/DashboardOverview';
 
 export default async function DashboardLayout({ children }) {
     return (

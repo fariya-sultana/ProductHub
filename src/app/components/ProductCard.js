@@ -4,7 +4,7 @@ import { Eye, ShoppingCart } from "lucide-react"
 import Image from "next/image";
 
 export default function ProductCard({ product }) {
-  console.log(product);
+  // console.log(product);
   return (
 
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">

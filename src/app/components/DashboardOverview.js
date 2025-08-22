@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 
 const DashboardOverview = () => {
     const { data: session } = useSession()
-    console.log("Session:", session);
+    // console.log("Session:", session);
 
     return (
         <div className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">

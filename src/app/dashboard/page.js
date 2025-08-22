@@ -21,7 +21,7 @@ async function getProducts() {
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
     const products = await getProducts();
-    console.log('Session:', session);
+    // console.log('Session:', session);
 
     return (
         <div className="space-y-8">
