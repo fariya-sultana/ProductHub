@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import clientPromise from "@/app/lib/mongodb";
+ // make sure you import your db connection
 
 const handler = NextAuth({
     providers: [
@@ -18,40 +20,47 @@ const handler = NextAuth({
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                // Replace this with your actual authentication logic, e.g., MongoDB
-                // Example static login
-                if (
-                    credentials?.email === "test@test.com" &&
-                    credentials?.password === "123456"
-                ) {
-                    return { id: "1", name: "Test User", email: "test@test.com" };
+                try {
+                    const client = await clientPromise;
+                    const db = client.db("product-management-app");
+
+                    const user = await db.collection("users").findOne({ email: credentials.email });
+
+                    if (!user) {
+                        // ❌ No user found
+                        return null;
+                    }
+
+                    if (user.password !== credentials.password) {
+                        // ❌ Wrong password
+                        return null;
+                    }
+
+                    // ✅ Auth success
+                    return { id: user._id.toString(), name: user.name, email: user.email };
+                } catch (err) {
+                    console.error("Authorize error:", err);
+                    return null;
                 }
-                // Return null if invalid credentials
-                return null;
             },
         }),
     ],
 
-    // Optional pages override
     pages: {
-        signIn: "/login", // Redirect to custom login page
+        signIn: "/login",
     },
 
     session: {
-        strategy: "jwt", // Use JWT for session
+        strategy: "jwt",
     },
 
     callbacks: {
         async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-            }
+            if (user) token.id = user.id;
             return token;
         },
         async session({ session, token }) {
-            if (token) {
-                session.user.id = token.id;
-            }
+            if (token) session.user.id = token.id;
             return session;
         },
     },
