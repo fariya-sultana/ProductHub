@@ -124,8 +124,8 @@ const LoginPage = () => {
 
     const fillDemoCredentials = () => {
         setFormData({
-            email: 'demo@example.com',
-            password: 'password123'
+            email: 'test@test.com',
+            password: '123456'
         })
         toast.success('Demo credentials filled!')
     }

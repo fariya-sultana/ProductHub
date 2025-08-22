@@ -62,7 +62,7 @@ export default function Navbar() {
                   </span>
                 </div>
                 <button
-                  onClick={() => signOut({ callbackUrl: '/' })}   // 👈 redirect to homepage after logout
+                  onClick={() => signOut({ callbackUrl: '/login' })}   // 👈 redirect to homepage after logout
                   className="flex items-center space-x-1 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
@@ -133,7 +133,7 @@ export default function Navbar() {
                     Logged in as: {session.user.name || session.user.email}
                   </div>
                   <button
-                    onClick={() => signOut({ callbackUrl: '/' })}  // 👈 redirect after logout
+                    onClick={() => signOut({ callbackUrl: '/login' })}  // 👈 redirect after logout
                     className="w-full text-left px-2 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                   >
                     Logout
